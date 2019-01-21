@@ -19,23 +19,23 @@ class UpdateActivity : AbstractUpdateActivity(), DownLoadDialog.OnFragmentOperat
     protected var mIsShowBackgroundDownload: Boolean = false
 
     protected override val updateDialogFragment: Fragment
-        get() = UpdateDialog.newInstance(mModel, mToastMsg, mIsShowToast)
+        get() = UpdateDialog.newInstance(mModel!!, mToastMsg!!, mIsShowToast)
 
     protected override val downLoadDialogFragment: Fragment
         get() = DownLoadDialog.newInstance(
-            mModel!!.url,
+            mModel!!.url!!,
             notificationIcon,
             PackageUtils.getVersionCode(getApplicationContext()) < mModel!!.minSupport,
             mIsShowBackgroundDownload
         )
 
-    protected fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update)
         getWindow().setLayout(calcWidth(), ViewGroup.LayoutParams.WRAP_CONTENT)
         setFinishOnTouchOutside(false)
         notificationIcon = getIntent().getIntExtra(Constant.NOTIFICATION_ICON, 0)
-        mModel = getIntent().getSerializableExtra(Constant.MODEL)
+        mModel = getIntent().getSerializableExtra(Constant.MODEL) as VersionModel
         mToastMsg = getIntent().getStringExtra(Constant.TOAST_MSG)
         mIsShowToast = getIntent().getBooleanExtra(Constant.IS_SHOW_TOAST_MSG, true)
         mIsShowBackgroundDownload = getIntent().getBooleanExtra(Constant.IS_SHOW_BACKGROUND_DOWNLOAD, true)
@@ -76,7 +76,7 @@ class UpdateActivity : AbstractUpdateActivity(), DownLoadDialog.OnFragmentOperat
             .commit()
     }
 
-    fun onBackPressed() {
+    override fun onBackPressed() {
         if (PackageUtils.getVersionCode(getApplicationContext()) < mModel!!.minSupport) {
             return
         }

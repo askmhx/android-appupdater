@@ -35,7 +35,6 @@ class CheckUpdateTask(
             }
 
             connection = url.openConnection() as HttpURLConnection
-
             if (mIsPost!!) {
                 val mStringBuilder = StringBuilder("")
                 if (mPostParams != null) {
@@ -51,26 +50,22 @@ class CheckUpdateTask(
                         }
                     }
                 }
-
                 val urlParameters = mStringBuilder.toString()
                 val postData = urlParameters.toByteArray(Charset.forName("UTF-8"))
                 val postDataLength = postData.size
-
                 connection.requestMethod = "POST"
-                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-                connection.setRequestProperty("charset", "utf-8")
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded ;charset=utf-8")
                 connection.setRequestProperty("Content-Length", Integer.toString(postDataLength))
                 connection.doOutput = true
                 connection.useCaches = false
-
                 val wr = DataOutputStream(connection.outputStream)
                 wr.write(postData)
                 wr.flush()
             }
 
-            val `in` = BufferedInputStream(connection.inputStream)
-            val data = read(`in`)
-            `in`.close()
+            val bis = BufferedInputStream(connection.inputStream)
+            val data = read(bis)
+            bis.close()
             L.d(TAG, "result:$data")
             try {
                 var model = VersionModel()

@@ -11,6 +11,9 @@ import com.iosxc.android.updater.R
 import com.iosxc.android.updater.utils.FileUtils
 
 import java.io.File
+import android.os.Build
+import android.app.NotificationChannel
+
 
 /**
  * Created by Crazz on 2017/3/8.
@@ -39,7 +42,6 @@ class DownLoadService : Service() {
             override fun done() {
                 mNotificationManager!!.cancel(NOTIFICATION_ID)
                 if (isBackground) {
-                    //download finish . start to install app
                     startActivity(FileUtils.openApkFile(applicationContext, File(filePath!!)))
                 } else {
                     if (mProgressListener != null) {
@@ -102,7 +104,15 @@ class DownLoadService : Service() {
     }
 
     fun showNotification(current: Int) {
-        mBuilder = NotificationCompat.Builder(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "channel"
+            val mChannel = NotificationChannel(channelId, "Update", NotificationManager.IMPORTANCE_HIGH)
+            mNotificationManager!!.createNotificationChannel(mChannel)
+            mBuilder = NotificationCompat.Builder(this, channelId)
+        } else {
+            mBuilder = NotificationCompat.Builder(this)
+        }
+
         mBuilder!!.setContentTitle(resources.getString(R.string.update_lib_file_download))
             .setContentText(resources.getString(R.string.update_lib_file_downloading))
             .setSmallIcon(if (notificationIcon == 0) R.drawable.ic_launcher else notificationIcon)
@@ -124,7 +134,6 @@ class DownLoadService : Service() {
     }
 
     companion object {
-
         private val NOTIFICATION_ID = 0
     }
 }

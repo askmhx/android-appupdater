@@ -10,11 +10,9 @@ import android.net.ConnectivityManager
 object NetWorkUtils {
     fun getNetworkStatus(context: Context): Boolean {
         val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (manager != null) {
-            val mNetworkInfo = manager.activeNetworkInfo
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable
-            }
+        val mNetworkInfo = manager.activeNetworkInfo
+        if (mNetworkInfo != null) {
+            return mNetworkInfo.isAvailable
         }
         return false
     }

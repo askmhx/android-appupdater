@@ -77,7 +77,7 @@ class AppUpdater private constructor() {
         if (checkUpdateTime(mTime)) {
             return
         }
-        CheckUpdateTask(mContext!!, mUrl!!, mIsPost, mPostParams, mParser, mInnerCallBack).start()
+        CheckUpdateTask(mContext!!, mUrl!!,mIsPost,  mPostParams, mParser, mInnerCallBack).start()
     }
 
     private fun checkUpdateTime(time: Long): Boolean {
@@ -99,7 +99,7 @@ class AppUpdater private constructor() {
             intent.putExtra(Constant.IS_SHOW_BACKGROUND_DOWNLOAD, mIsShowBackgroundDownload)
             context!!.startActivity(intent)
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
 
     }

@@ -13,7 +13,7 @@ import java.net.URL
 class DownLoadTask(
     private val mFilePath: String,
     private val mDownLoadUrl: String,
-    private val mProgressListener: ProgressListener?
+    private val mProgressListener: ProgressListener
 ) : Thread() {
     private var bis: InputStream? = null
 
@@ -40,7 +40,7 @@ class DownLoadTask(
             writeToFile(bis!!, count, mFilePath)
         } catch (e: Exception) {
             e.printStackTrace()
-            mProgressListener?.onError()
+            mProgressListener.onError()
         } finally {
             if (bis != null) {
                 try {
@@ -60,20 +60,21 @@ class DownLoadTask(
         if (file.exists()) {
             file.delete()
         }
-        file.copyInputStreamToFile(bis, count)
+        var length = 0.toLong()
+        val buffer = ByteArray(1024)
+        var len: Int
+        val fileOut = file.outputStream()
+        while (true) {
+            len = bis.read(buffer)
+            length += len
+            mProgressListener.update(length, count.toLong())
+            if (len <= 0)
+                break
+            fileOut.write(buffer, 0, len)
+        }
+        mProgressListener.done()
     }
 
-    fun File.copyInputStreamToFile(inputStream: InputStream, count: Int) {
-        inputStream.use { input ->
-            var length = 0.toLong()
-            this.outputStream().use { fileOut ->
-                length += 1
-                input.copyTo(fileOut)
-                mProgressListener!!.update(length, count.toLong())
-            }
-        }
-        mProgressListener!!.done()
-    }
 
     interface ProgressListener {
         fun done()

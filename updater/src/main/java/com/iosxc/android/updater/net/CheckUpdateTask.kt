@@ -9,7 +9,6 @@ import org.json.JSONException
 
 import java.io.*
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -57,6 +56,7 @@ class CheckUpdateTask(
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded ;charset=utf-8")
                 connection.setRequestProperty("Content-Length", Integer.toString(postDataLength))
                 connection.doOutput = true
+                connection.doInput = true
                 connection.useCaches = false
                 val wr = DataOutputStream(connection.outputStream)
                 wr.write(postData)
@@ -71,6 +71,7 @@ class CheckUpdateTask(
                 var model = VersionModel()
                 if (mConverter != null) {
                     model = mConverter.parse(data)
+                    model.versionCode = 3
                 } else {
                     model.parse(data)
                 }
@@ -80,10 +81,7 @@ class CheckUpdateTask(
                 mCallBack.callBack(null, false)
             }
 
-        } catch (e: MalformedURLException) {
-            e.printStackTrace()
-            mCallBack.callBack(null, false)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             mCallBack.callBack(null, false)
         } finally {

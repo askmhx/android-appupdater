@@ -25,6 +25,8 @@ class VersionModel : Serializable {
     var minSupport: Int = 0
     var url: String? = null
 
+
+
     @Throws(JSONException::class)
     fun parse(json: String): VersionModel {
         val `object` = JSONObject(json)
@@ -34,5 +36,9 @@ class VersionModel : Serializable {
         url = `object`.getString("url")
         minSupport = `object`.optInt("minSupport")
         return this
+    }
+
+    override fun toString(): String {
+        return "VersionModel(versionCode=$versionCode, versionName=$versionName, content=$content, minSupport=$minSupport, url=$url)"
     }
 }

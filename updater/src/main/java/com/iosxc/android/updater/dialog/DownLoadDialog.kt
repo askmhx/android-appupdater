@@ -84,7 +84,8 @@ class DownLoadDialog : DialogFragment(), View.OnClickListener {
             mHandler.sendEmptyMessage(ERROR)
         }
     }
-    private val mHandler = object : Handler() {
+    private val mHandler = @SuppressLint("HandlerLeak")
+    object : Handler() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 LOADING -> {

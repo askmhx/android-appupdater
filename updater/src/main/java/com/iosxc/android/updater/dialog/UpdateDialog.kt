@@ -99,7 +99,7 @@ class UpdateDialog : AbstractFragment(), View.OnClickListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is UpdateActivity) {
-            mActivity = context as UpdateActivity
+            mActivity = context
         }
     }
 
@@ -131,7 +131,7 @@ class UpdateDialog : AbstractFragment(), View.OnClickListener {
 
     companion object {
 
-        fun newInstance(model: VersionModel, toastMsg: String, isShowToast: Boolean): UpdateDialog {
+        fun newInstance(model: VersionModel?, toastMsg: String?, isShowToast: Boolean): UpdateDialog {
             val args = Bundle()
             args.putSerializable(Constant.MODEL, model)
             args.putString(Constant.TOAST_MSG, toastMsg)

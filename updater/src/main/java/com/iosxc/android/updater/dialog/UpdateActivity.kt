@@ -10,7 +10,7 @@ import com.iosxc.android.updater.bean.VersionModel
 import com.iosxc.android.updater.common.Constant
 import com.iosxc.android.updater.utils.PackageUtils
 
-class UpdateActivity : AbstractUpdateActivity(), DownLoadDialog.OnFragmentOperation {
+open class UpdateActivity : AbstractUpdateActivity(), DownLoadDialog.OnFragmentOperation {
 
     private var notificationIcon: Int = 0
     protected var mModel: VersionModel? = null
@@ -18,10 +18,10 @@ class UpdateActivity : AbstractUpdateActivity(), DownLoadDialog.OnFragmentOperat
     protected var mIsShowToast: Boolean = false
     protected var mIsShowBackgroundDownload: Boolean = false
 
-    protected override val updateDialogFragment: Fragment
-        get() = UpdateDialog.newInstance(mModel!!, mToastMsg!!, mIsShowToast)
+    override val updateDialogFragment: Fragment
+        get() = UpdateDialog.newInstance(mModel!!, mToastMsg, mIsShowToast)
 
-    protected override val downLoadDialogFragment: Fragment
+    override val downLoadDialogFragment: Fragment
         get() = DownLoadDialog.newInstance(
             mModel!!.url!!,
             notificationIcon,

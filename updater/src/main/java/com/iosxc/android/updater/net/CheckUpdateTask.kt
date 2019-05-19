@@ -71,7 +71,6 @@ class CheckUpdateTask(
                 var model = VersionModel()
                 if (mConverter != null) {
                     model = mConverter.parse(data)
-                    model.versionCode = 3
                 } else {
                     model.parse(data)
                 }

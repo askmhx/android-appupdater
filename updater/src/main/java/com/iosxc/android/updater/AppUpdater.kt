@@ -53,7 +53,9 @@ class AppUpdater private constructor() {
             //记录本次更新时间
             PublicFunctionUtils.setLastCheckTime(mContext!!, System.currentTimeMillis())
             if (mCallback != null) {
-                mCallback!!.callBack(model, hasNewVersion)
+                mHandler.post{
+                    mCallback!!.callBack(model, hasNewVersion)
+                }
             }
             if (hasNewVersion || mIsShowToast) {
                 start2Activity(mContext!!, model)
